@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Docs-as-Code Platform — Documentation</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0f0f14;
+  --bg-sidebar: #0a0a0e;
+  --bg-surface: #17171f;
+  --bg-elevated: #1e1e2a;
+  --bg-code: #0d0d12;
+  --border: #2a2a38;
+  --border-light: #33334a;
+  --text: #e2e2f0;
+  --text-secondary: #9090b0;
+  --text-muted: #5a5a78;
+  --accent: #E8A84C;
+  --accent-dim: rgba(232,168,76,0.12);
+  --accent-glow: rgba(232,168,76,0.25);
+  --green: #4ade80;
+  --green-dim: rgba(74,222,128,0.1);
+  --blue: #60a5fa;
+  --blue-dim: rgba(96,165,250,0.1);
+  --red: #f87171;
+  --red-dim: rgba(248,113,113,0.1);
+  --topbar-h: 58px;
+  --sidebar-w: 256px;
+  --toc-w: 196px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { font-size: 15px; scroll-behavior: smooth; }
+body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 10px; }
+
+/* ── TOPBAR ── */
+.topbar {
+  height: var(--topbar-h); min-height: var(--topbar-h);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 1.5rem;
+  background: rgba(15,15,20,0.95);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(8px);
+  z-index: 100;
+  gap: 1.5rem;
+}
+.topbar-left { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+.brand-icon { width: 34px; height: 34px; border-radius: 9px; background: linear-gradient(135deg,#E8A84C,#c97d2a); display: flex; align-items: center; justify-content: center; font-family: 'Outfit', sans-serif; font-size: 0.62rem; font-weight: 800; color: #0f0f14; letter-spacing: -0.5px; }
+.brand-text { display: flex; flex-direction: column; gap: 1px; }
+.brand-name { font-family: 'Outfit', sans-serif; font-size: 0.95rem; font-weight: 700; color: #fff; line-height: 1; }
+.brand-sub { font-size: 0.68rem; color: var(--text-muted); line-height: 1; }
+.topbar-center { flex: 1; max-width: 480px; }
+.search-bar { display: flex; align-items: center; gap: 8px; background: var(--bg-surface); border: 1px solid var(--border); border-radius: 8px; padding: 0 12px; height: 36px; cursor: text; transition: border-color 0.2s; }
+.search-bar:hover { border-color: var(--border-light); }
+.search-icon { color: var(--text-muted); font-size: 0.8rem; }
+.search-bar input { flex: 1; background: none; border: none; outline: none; color: var(--text-secondary); font-size: 0.85rem; font-family: 'Inter', sans-serif; cursor: text; }
+.search-bar kbd { background: var(--bg-elevated); border: 1px solid var(--border-light); color: var(--text-muted); font-size: 0.65rem; padding: 2px 5px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; }
+.topbar-right { display: flex; align-items: center; gap: 0.75rem; flex-shrink: 0; }
+.topbar-link { color: var(--text-secondary); font-size: 0.82rem; text-decoration: none; padding: 6px 12px; border-radius: 7px; transition: background 0.2s, color 0.2s; }
+.topbar-link:hover { background: var(--bg-surface); color: var(--text); }
+.topbar-cta { background: var(--accent-dim); border: 1px solid var(--accent-glow); color: var(--accent); font-size: 0.82rem; font-weight: 600; padding: 6px 14px; border-radius: 7px; text-decoration: none; transition: background 0.2s; }
+.topbar-cta:hover { background: rgba(232,168,76,0.2); }
+
+/* ── WRAPPER ── */
+.wrapper { display: flex; flex: 1; overflow: hidden; }
+
+/* ── SIDEBAR ── */
+.sidebar { width: var(--sidebar-w); min-width: var(--sidebar-w); background: var(--bg-sidebar); border-right: 1px solid var(--border); overflow-y: auto; padding: 1.5rem 0 2rem; }
+.nav-group { margin-bottom: 1.5rem; }
+.nav-group-title { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); padding: 0 1.25rem; margin-bottom: 0.4rem; }
+.nav-link { display: flex; align-items: center; justify-content: space-between; padding: 6px 1.25rem; font-size: 0.875rem; color: var(--text-secondary); text-decoration: none; cursor: pointer; border-left: 2px solid transparent; transition: color 0.15s, background 0.15s, border-color 0.15s; user-select: none; }
+.nav-link:hover { color: var(--text); background: rgba(255,255,255,0.04); }
+.nav-link.active { color: var(--accent); background: var(--accent-dim); border-left-color: var(--accent); font-weight: 600; }
+.nav-badge { background: var(--bg-elevated); color: var(--text-muted); font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; }
+.nav-badge.new { background: rgba(74,222,128,0.15); color: var(--green); }
+
+/* ── CONTENT AREA ── */
+.content-area { display: flex; flex: 1; overflow: hidden; }
+.main { flex: 1; overflow-y: auto; padding: 2.5rem 3rem 4rem; max-width: 820px; }
+.toc-rail { width: var(--toc-w); min-width: var(--toc-w); padding: 2.5rem 0 2rem 1.5rem; overflow-y: auto; border-left: 1px solid var(--border); }
+.toc-title { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.75rem; }
+.toc-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+.toc-link { display: block; font-size: 0.8rem; color: var(--text-secondary); text-decoration: none; padding: 3px 8px; border-radius: 5px; border-left: 2px solid transparent; transition: color 0.15s, border-color 0.15s; line-height: 1.5; }
+.toc-link:hover { color: var(--text); border-left-color: var(--border-light); }
+.toc-link.active { color: var(--accent); border-left-color: var(--accent); }
+.toc-link.sub { padding-left: 16px; font-size: 0.76rem; color: var(--text-muted); }
+.toc-link.sub:hover { color: var(--text-secondary); }
+
+/* ── PAGE SECTIONS ── */
+.page { display: none; }
+.page.active { display: block; }
+
+/* ── TYPOGRAPHY ── */
+.page-eyebrow { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.6rem; }
+.page h1 { font-family: 'Outfit', sans-serif; font-size: 2rem; font-weight: 800; color: #fff; line-height: 1.2; margin-bottom: 1rem; }
+.page .lead { font-size: 1.05rem; color: var(--text-secondary); line-height: 1.8; margin-bottom: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 2rem; }
+.page h2 { font-family: 'Outfit', sans-serif; font-size: 1.3rem; font-weight: 700; color: #fff; margin: 2.5rem 0 0.8rem; padding-top: 0.5rem; }
+.page h2:first-of-type { margin-top: 0; }
+.page h3 { font-family: 'Outfit', sans-serif; font-size: 1rem; font-weight: 700; color: var(--text); margin: 1.8rem 0 0.6rem; }
+.page p { color: var(--text-secondary); font-size: 0.925rem; margin-bottom: 1rem; line-height: 1.8; }
+.page ul, .page ol { padding-left: 1.5rem; margin-bottom: 1rem; }
+.page li { color: var(--text-secondary); font-size: 0.925rem; line-height: 1.8; margin-bottom: 0.25rem; }
+.page strong { color: var(--text); font-weight: 600; }
+.page a { color: var(--accent); text-decoration: none; }
+.page a:hover { text-decoration: underline; }
+.page code { font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; background: var(--bg-elevated); color: var(--accent); padding: 2px 6px; border-radius: 5px; border: 1px solid var(--border); }
+.page pre { background: var(--bg-code); border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem 1.5rem; overflow-x: auto; margin: 1rem 0 1.5rem; font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; line-height: 1.7; }
+.page pre code { background: none; border: none; padding: 0; color: #e2e2f0; font-size: inherit; }
+.pre-header { display: flex; align-items: center; justify-content: space-between; background: var(--bg-elevated); border: 1px solid var(--border); border-bottom: none; border-radius: 10px 10px 0 0; padding: 8px 1.25rem; font-size: 0.75rem; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; }
+.pre-header + pre { border-radius: 0 0 10px 10px; margin-top: 0; }
+.hl-k { color: #c792ea; } /* keyword */
+.hl-s { color: #c3e88d; } /* string */
+.hl-c { color: #5c6370; font-style: italic; } /* comment */
+.hl-n { color: #82aaff; } /* name/key */
+.hl-v { color: #f78c6c; } /* value */
+.hl-p { color: var(--accent); } /* punctuation/accent */
+
+/* ── CALLOUTS ── */
+.callout { display: flex; gap: 1rem; border-radius: 10px; padding: 1rem 1.25rem; margin: 1.25rem 0; border: 1px solid; font-size: 0.875rem; }
+.callout-icon { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+.callout-body strong { display: block; font-weight: 600; margin-bottom: 0.25rem; font-size: 0.875rem; }
+.callout-body p { margin: 0; line-height: 1.7; }
+.callout.info { background: var(--blue-dim); border-color: rgba(96,165,250,0.25); }
+.callout.info .callout-body strong { color: var(--blue); }
+.callout.info .callout-body p { color: var(--text-secondary); }
+.callout.tip { background: var(--green-dim); border-color: rgba(74,222,128,0.25); }
+.callout.tip .callout-body strong { color: var(--green); }
+.callout.tip .callout-body p { color: var(--text-secondary); }
+.callout.warning { background: rgba(232,168,76,0.08); border-color: rgba(232,168,76,0.3); }
+.callout.warning .callout-body strong { color: var(--accent); }
+.callout.warning .callout-body p { color: var(--text-secondary); }
+.callout.important { background: var(--red-dim); border-color: rgba(248,113,113,0.25); }
+.callout.important .callout-body strong { color: var(--red); }
+.callout.important .callout-body p { color: var(--text-secondary); }
+
+/* ── TABLES ── */
+.page table { width: 100%; border-collapse: collapse; margin: 1rem 0 1.5rem; font-size: 0.875rem; }
+.page th { text-align: left; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); border-bottom: 1px solid var(--border); padding: 8px 12px; }
+.page td { border-bottom: 1px solid rgba(42,42,56,0.6); padding: 10px 12px; color: var(--text-secondary); vertical-align: top; line-height: 1.6; }
+.page tr:last-child td { border-bottom: none; }
+.page tr:hover td { background: rgba(255,255,255,0.02); }
+
+/* ── STEP LIST ── */
+.step-list { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 1.25rem; margin: 1.25rem 0 1.5rem; }
+.step { display: flex; gap: 1rem; }
+.step-num { width: 28px; height: 28px; border-radius: 50%; background: var(--accent-dim); border: 1px solid var(--accent-glow); color: var(--accent); font-size: 0.78rem; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; font-family: 'JetBrains Mono', monospace; }
+.step-body strong { display: block; color: var(--text); font-size: 0.9rem; margin-bottom: 0.25rem; }
+.step-body p { margin: 0; font-size: 0.875rem; }
+
+/* ── CARD GRID ── */
+.card-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin: 1.25rem 0; }
+.card { background: var(--bg-surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; text-decoration: none; transition: border-color 0.2s, transform 0.15s; display: block; cursor: pointer; }
+.card:hover { border-color: rgba(232,168,76,0.35); transform: translateY(-2px); }
+.card-icon { font-size: 1.4rem; margin-bottom: 0.6rem; }
+.card-title { font-family: 'Outfit', sans-serif; font-size: 0.95rem; font-weight: 700; color: #fff; margin-bottom: 0.3rem; }
+.card-desc { font-size: 0.82rem; color: var(--text-secondary); line-height: 1.6; }
+
+/* ── PIPELINE VISUAL ── */
+.pipeline-vis { display: flex; gap: 0; margin: 1.5rem 0; background: var(--bg-surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+.pipe-step { flex: 1; padding: 1.2rem 1rem; border-right: 1px solid var(--border); position: relative; }
+.pipe-step:last-child { border-right: none; }
+.pipe-step-num { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em; color: var(--accent); text-transform: uppercase; margin-bottom: 0.3rem; }
+.pipe-step-name { font-size: 0.88rem; font-weight: 700; color: #fff; margin-bottom: 0.3rem; }
+.pipe-step-detail { font-size: 0.76rem; color: var(--text-muted); line-height: 1.5; }
+.pipe-arrow { position: absolute; right: -9px; top: 50%; transform: translateY(-50%); color: var(--accent); font-size: 0.9rem; z-index: 1; }
+
+/* ── PAGE NAV ── */
+.page-nav { display: flex; justify-content: space-between; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
+.page-nav-btn { display: flex; flex-direction: column; gap: 2px; text-decoration: none; padding: 10px 14px; border: 1px solid var(--border); border-radius: 9px; max-width: 220px; transition: border-color 0.2s; cursor: pointer; background: none; }
+.page-nav-btn:hover { border-color: var(--accent); }
+.page-nav-label { font-size: 0.7rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; }
+.page-nav-title { font-size: 0.88rem; font-weight: 600; color: var(--text); }
+.page-nav-btn.next { text-align: right; margin-left: auto; }
+
+/* ── STATUS BADGES ── */
+.badge { display: inline-block; font-size: 0.68rem; font-weight: 700; padding: 2px 8px; border-radius: 5px; letter-spacing: 0.04em; }
+.badge-green { background: var(--green-dim); color: var(--green); }
+.badge-amber { background: var(--accent-dim); color: var(--accent); }
+.badge-blue { background: var(--blue-dim); color: var(--blue); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 1100px) { .toc-rail { display: none; } }
+@media (max-width: 768px) { .sidebar { display: none; } .main { padding: 1.5rem; } .topbar-center { display: none; } }
+</style>
+</head>
+<body>
+
+<!-- ═══════ TOPBAR ═══════ -->
+<header class="topbar">
+  <div class="topbar-left">
+    <div class="brand-icon">DaC</div>
+    <div class="brand-text">
+      <span class="brand-name">Docs-as-Code Platform</span>
+      <span class="brand-sub">Documentation Guide</span>
+    </div>
+  </div>
+  <div class="topbar-center">
+    <div class="search-bar">
+      <span class="search-icon">⌕</span>
+      <input type="text" placeholder="Search documentation...">
+      <kbd>/</kbd>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <span class="badge badge-green">v1.0 · Stable</span>
+    <a href="https://sulagnasasmal.github.io/Docs-as-Code-Platform/docforge-platform.html" target="_blank" class="topbar-cta">Try Dashboard →</a>
+    <a href="https://github.com/SulagnaSasmal" target="_blank" class="topbar-link">⌥ GitHub</a>
+  </div>
+</header>
+
+<!-- ═══════ WRAPPER ═══════ -->
+<div class="wrapper">
+
+  <!-- ═══════ SIDEBAR ═══════ -->
+  <aside class="sidebar">
+    <div class="nav-group">
+      <div class="nav-group-title">Getting Started</div>
+      <div class="nav-link active" onclick="navigate('intro')">Introduction</div>
+      <div class="nav-link" onclick="navigate('what-is')">What is Docs-as-Code?</div>
+      <div class="nav-link" onclick="navigate('quickstart')">Quick Start Guide</div>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-title">Core Concepts</div>
+      <div class="nav-link" onclick="navigate('pipeline')">The Docs Pipeline</div>
+      <div class="nav-link" onclick="navigate('version-control')">Version Control</div>
+      <div class="nav-link" onclick="navigate('cicd')">CI/CD Integration</div>
+      <div class="nav-link" onclick="navigate('linting')">Style Linting</div>
+      <div class="nav-link" onclick="navigate('multiformat')">Multi-Format Output</div>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-title">Platform Modules</div>
+      <div class="nav-link" onclick="navigate('mod-dashboard')">Dashboard</div>
+      <div class="nav-link" onclick="navigate('mod-editor')">Live Editor</div>
+      <div class="nav-link" onclick="navigate('mod-contentmap')">Content Map</div>
+      <div class="nav-link" onclick="navigate('mod-linter')">Style Linter</div>
+      <div class="nav-link" onclick="navigate('mod-outputs')">Build Outputs</div>
+      <div class="nav-link" onclick="navigate('mod-config')">Configuration</div>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-title">Reference</div>
+      <div class="nav-link" onclick="navigate('ref-config')">Config Schema</div>
+      <div class="nav-link" onclick="navigate('ref-changelog')">Changelog <span class="nav-badge new">v1.0</span></div>
+    </div>
+  </aside>
+
+  <!-- ═══════ CONTENT AREA ═══════ -->
+  <div class="content-area">
+    <main class="main" id="main-content">
+
+      <!-- ══ PAGE: INTRODUCTION ══ -->
+      <div id="page-intro" class="page active">
+        <div class="page-eyebrow">Getting Started</div>
+        <h1>Docs-as-Code Platform</h1>
+        <p class="lead">The Docs-as-Code Platform is a documentation engineering system that applies software development discipline to the entire documentation lifecycle — from writing and reviewing to building, validating, and publishing. This guide explains what it is, why it exists, how it works, and how to use it.</p>
+
+        <h2 id="what-is">What Is This Platform?</h2>
+        <p>The Docs-as-Code Platform is a purpose-built system for teams who want their documentation to behave like their code. Instead of managing docs in shared Word files, disconnected wikis, or manual CMS tools, this platform treats every document as source code — stored in Git, reviewed via pull requests, tested through a CI/CD pipeline, and deployed automatically to multiple output formats.</p>
+        <p>It was designed and built by <strong>Sulagna Sasmal</strong>, a Technical Writer and Documentation Engineer specialising in fintech, compliance platforms, and developer-facing APIs. The platform reflects how documentation should work in regulated, engineering-led organisations.</p>
+
+        <div class="callout info">
+          <span class="callout-icon">ℹ</span>
+          <div class="callout-body">
+            <strong>Docs-as-Code defined</strong>
+            <p>Docs-as-Code means applying the same tools, workflows, and standards used for software development — Git, code review, CI/CD, automated testing — to the creation and maintenance of documentation.</p>
+          </div>
+        </div>
+
+        <h2 id="purpose">Purpose &amp; Goals</h2>
+        <p>Documentation fails organisations for predictable reasons: it goes out of date immediately after release, no one knows what changed or when, quality is inconsistent across authors, and publishing is a slow manual process. This platform was built to solve each of those problems systematically.</p>
+        <ul>
+          <li><strong>Single source of truth</strong> — one Markdown source compiles to every output format. No copy-paste drift between the web portal, PDF, and API spec.</li>
+          <li><strong>Full audit history</strong> — every change is tracked in Git with author, timestamp, and commit message. Critical for regulated industries like financial services and healthcare.</li>
+          <li><strong>Automated quality gates</strong> — style linting, broken-link detection, and structural validation run on every commit before anything reaches readers.</li>
+          <li><strong>Continuous publishing</strong> — docs go live the moment a pull request merges. No manual export steps, no publishing queues, no staging servers to manage.</li>
+          <li><strong>Developer-native workflow</strong> — writers work in the same tools engineers use. Docs ship alongside the feature, not weeks after.</li>
+        </ul>
+
+        <h2 id="who">Who Is This For?</h2>
+        <table>
+          <thead><tr><th>Role</th><th>How this platform helps</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Technical Writers</strong></td><td>Write in Markdown with full tooling support, use Git branches for drafts, get automated style feedback before review</td></tr>
+            <tr><td><strong>Documentation Engineers</strong></td><td>Manage the build pipeline, define style rules, configure output targets, monitor doc health via the dashboard</td></tr>
+            <tr><td><strong>Development Teams</strong></td><td>Review and approve doc changes via pull requests, same as code — docs ship with the feature</td></tr>
+            <tr><td><strong>Compliance Teams</strong></td><td>Query the tamper-evident Git history for any documentation change, exportable as a signed audit report</td></tr>
+            <tr><td><strong>Product Managers</strong></td><td>Track documentation coverage against feature releases, view build health and content metrics in the dashboard</td></tr>
+          </tbody>
+        </table>
+
+        <h2 id="platform">Platform at a Glance</h2>
+        <p>The platform consists of five pipeline stages and six management modules. The pipeline is the automated process that converts source files into published documentation. The modules are the interactive tools for managing that process.</p>
+        <div class="pipeline-vis">
+          <div class="pipe-step">
+            <div class="pipe-step-num">01</div>
+            <div class="pipe-step-name">✍️ Write</div>
+            <div class="pipe-step-detail">Markdown, MDX, OpenAPI</div>
+            <span class="pipe-arrow">›</span>
+          </div>
+          <div class="pipe-step">
+            <div class="pipe-step-num">02</div>
+            <div class="pipe-step-name">🔀 Review</div>
+            <div class="pipe-step-detail">Git, Pull Requests</div>
+            <span class="pipe-arrow">›</span>
+          </div>
+          <div class="pipe-step">
+            <div class="pipe-step-num">03</div>
+            <div class="pipe-step-name">⚙️ Build</div>
+            <div class="pipe-step-detail">MkDocs, Sphinx, Hugo</div>
+            <span class="pipe-arrow">›</span>
+          </div>
+          <div class="pipe-step">
+            <div class="pipe-step-num">04</div>
+            <div class="pipe-step-name">🔍 Validate</div>
+            <div class="pipe-step-detail">Vale, link checks</div>
+            <span class="pipe-arrow">›</span>
+          </div>
+          <div class="pipe-step">
+            <div class="pipe-step-num">05</div>
+            <div class="pipe-step-name">🚀 Publish</div>
+            <div class="pipe-step-detail">GitHub Pages, Netlify</div>
+          </div>
+        </div>
+
+        <h2 id="next-steps">Explore the Platform</h2>
+        <div class="card-grid">
+          <div class="card" onclick="navigate('what-is')">
+            <div class="card-icon">📖</div>
+            <div class="card-title">What is Docs-as-Code?</div>
+            <div class="card-desc">Understand the methodology, its five principles, and why it matters.</div>
+          </div>
+          <div class="card" onclick="navigate('quickstart')">
+            <div class="card-icon">⚡</div>
+            <div class="card-title">Quick Start Guide</div>
+            <div class="card-desc">Get your first documentation pipeline running in under 10 minutes.</div>
+          </div>
+          <div class="card" onclick="navigate('pipeline')">
+            <div class="card-icon">⚙️</div>
+            <div class="card-title">The Docs Pipeline</div>
+            <div class="card-desc">Deep dive into each of the five stages from write to publish.</div>
+          </div>
+          <div class="card" onclick="navigate('mod-dashboard')">
+            <div class="card-icon">◫</div>
+            <div class="card-title">Platform Modules</div>
+            <div class="card-desc">Explore the dashboard, editor, content map, linter, and more.</div>
+          </div>
+        </div>
+
+        <div class="page-nav">
+          <span></span>
+          <button class="page-nav-btn next" onclick="navigate('what-is')">
+            <span class="page-nav-label">Next →</span>
+            <span class="page-nav-title">What is Docs-as-Code?</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- ══ PAGE: WHAT IS DOCS-AS-CODE ══ -->
+      <div id="page-what-is" class="page">
+        <div class="page-eyebrow">Getting Started</div>
+        <h1>What Is Docs-as-Code?</h1>
+        <p class="lead">Docs-as-Code is a documentation methodology that applies software engineering discipline — version control, peer review, automated testing, continuous delivery — to how documentation is written, managed, and published. It is not a tool. It is a way of working.</p>
+
+        <h2 id="core-idea">The Core Idea</h2>
+        <p>Software teams have spent decades building practices that make code reliable, traceable, and maintainable: every change is tracked in Git, reviewed by peers, tested automatically before it ships, and deployed with a repeatable process. Documentation teams have largely not had access to those same practices — until Docs-as-Code.</p>
+        <p>The insight is straightforward: documentation is a deliverable that belongs to the same codebase as the software it describes. When docs live in a Git repository, written in plain text formats like Markdown, they gain all the same properties as the code they document: full history, structured review, automated quality checks, and continuous deployment.</p>
+
+        <h2 id="principles">The Five Principles</h2>
+        <ol class="step-list">
+          <li class="step"><div class="step-num">1</div><div class="step-body"><strong>Plain text source</strong><p>Documentation is written in a lightweight markup language — Markdown, MDX, or reStructuredText — not in proprietary formats. Plain text is readable by humans, diffable by tools, and not locked to any vendor.</p></div></li>
+          <li class="step"><div class="step-num">2</div><div class="step-body"><strong>Version controlled in Git</strong><p>Every change to every document is committed to a Git repository. The full history of who changed what, when, and why is permanently available. Branches enable parallel drafts without overwriting each other.</p></div></li>
+          <li class="step"><div class="step-num">3</div><div class="step-body"><strong>Reviewed like code</strong><p>Documentation changes go through pull requests. Subject-matter experts, editors, and engineers review the diff before anything merges. Review comments are visible, tracked, and resolved — creating a transparent editorial process.</p></div></li>
+          <li class="step"><div class="step-num">4</div><div class="step-body"><strong>Tested before publishing</strong><p>A CI pipeline runs automatically on every change. It checks for broken links, style guide violations, missing frontmatter, schema errors in OpenAPI specs, and any other quality rule the team defines. The build fails if standards are not met.</p></div></li>
+          <li class="step"><div class="step-num">5</div><div class="step-body"><strong>Deployed continuously</strong><p>When a change merges, the documentation site rebuilds and deploys automatically. The published site is always in sync with the repository. There is no manual publish step, no FTP uploads, no stale cached versions.</p></div></li>
+        </ol>
+
+        <h2 id="comparison">Traditional Docs vs Docs-as-Code</h2>
+        <table>
+          <thead><tr><th>Area</th><th>Traditional Documentation</th><th>Docs-as-Code</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Source format</strong></td><td>Word, PDF, wiki markup</td><td>Markdown / MDX / OpenAPI</td></tr>
+            <tr><td><strong>Version control</strong></td><td>File naming (v2_FINAL.docx)</td><td>Git — full history, branches, tags</td></tr>
+            <tr><td><strong>Review process</strong></td><td>Email chains, tracked changes</td><td>Pull requests with inline comments</td></tr>
+            <tr><td><strong>Quality checks</strong></td><td>Manual proofreading</td><td>Automated lint, link checks, CI</td></tr>
+            <tr><td><strong>Publishing</strong></td><td>Manual export and upload</td><td>Automatic on merge</td></tr>
+            <tr><td><strong>Audit trail</strong></td><td>None or fragmented</td><td>Complete — every commit is signed</td></tr>
+            <tr><td><strong>Multi-format output</strong></td><td>Maintain separate files per format</td><td>One source → HTML, PDF, JSON, search index</td></tr>
+            <tr><td><strong>Collaboration</strong></td><td>One person edits at a time</td><td>Parallel branches, no conflicts until merge</td></tr>
+          </tbody>
+        </table>
+
+        <h2 id="toolchain">The Toolchain</h2>
+        <p>Docs-as-Code relies on a composable toolchain. You choose the tools that fit your stack — the methodology works with any combination.</p>
+        <table>
+          <thead><tr><th>Stage</th><th>Tools</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Writing</strong></td><td>VS Code, any text editor, or this platform's Live Editor</td></tr>
+            <tr><td><strong>Version control</strong></td><td>Git, GitHub, GitLab, Bitbucket</td></tr>
+            <tr><td><strong>Build</strong></td><td>MkDocs, Sphinx, Hugo, Docusaurus, Eleventy</td></tr>
+            <tr><td><strong>Linting</strong></td><td>Vale (style), markdownlint (structure), lychee (links)</td></tr>
+            <tr><td><strong>CI/CD</strong></td><td>GitHub Actions, GitLab CI, CircleCI, Jenkins</td></tr>
+            <tr><td><strong>Hosting</strong></td><td>GitHub Pages, Netlify, Vercel, AWS S3 + CloudFront</td></tr>
+          </tbody>
+        </table>
+
+        <div class="callout tip">
+          <span class="callout-icon">✦</span>
+          <div class="callout-body">
+            <strong>Why it matters for regulated industries</strong>
+            <p>In financial services, healthcare, and other regulated domains, documentation is not just a developer convenience — it is evidence. A Git repository provides a tamper-evident, timestamped record of every change to every document. That record can be exported as a compliance audit report at any time.</p>
+          </div>
+        </div>
+
+        <div class="page-nav">
+          <button class="page-nav-btn" onclick="navigate('intro')"><span class="page-nav-label">← Previous</span><span class="page-nav-title">Introduction</span></button>
+          <button class="page-nav-btn next" onclick="navigate('quickstart')"><span class="page-nav-label">Next →</span><span class="page-nav-title">Quick Start Guide</span></button>
+        </div>
+      </div>
+
+      <!-- ══ PAGE: QUICK START ══ -->
+      <div id="page-quickstart" class="page">
+        <div class="page-eyebrow">Getting Started</div>
+        <h1>Quick Start Guide</h1>
+        <p class="lead">This guide walks you through setting up a Docs-as-Code pipeline from scratch — from creating your repository to seeing your documentation go live on GitHub Pages. Estimated time: 15 minutes.</p>
+
+        <h2 id="prerequisites">Prerequisites</h2>
+        <table>
+          <thead><tr><th>Tool</th><th>Version</th><th>Purpose</th></tr></thead>
+          <tbody>
+            <tr><td><code>git</code></td><td>2.x+</td><td>Version control for your docs source</td></tr>
+            <tr><td><code>python</code></td><td>3.10+</td><td>Required by MkDocs build engine</td></tr>
+            <tr><td><code>pip</code></td><td>latest</td><td>Installs MkDocs and plugins</td></tr>
+            <tr><td>GitHub account</td><td>—</td><td>Repository hosting and GitHub Pages deployment</td></tr>
+            <tr><td>Vale CLI</td><td>3.x+</td><td>Style linting (optional for quick start)</td></tr>
+          </tbody>
+        </table>
+
+        <h2 id="steps">Setup Steps</h2>
+        <ol class="step-list">
+          <li class="step"><div class="step-num">1</div><div class="step-body">
+            <strong>Create and clone your repository</strong>
+            <p>Create a new public repository on GitHub, then clone it locally. This is where all your documentation source files will live.</p>
+          </div></li>
+        </ol>
+        <div class="pre-header">bash</div>
+        <pre><code>git clone https://github.com/your-username/your-docs-repo.git
+cd your-docs-repo</code></pre>
+
+        <ol class="step-list" start="2">
+          <li class="step"><div class="step-num">2</div><div class="step-body">
+            <strong>Install MkDocs and the Material theme</strong>
+            <p>MkDocs is the build engine. The Material theme provides a professional documentation portal layout out of the box.</p>
+          </div></li>
+        </ol>
+        <div class="pre-header">bash</div>
+        <pre><code>pip install mkdocs mkdocs-material</code></pre>
+
+        <ol class="step-list" start="3">
+          <li class="step"><div class="step-num">3</div><div class="step-body">
+            <strong>Initialise the project structure</strong>
+            <p>Run <code>mkdocs new .</code> to scaffold the config file and <code>docs/</code> directory. Your first document is created automatically.</p>
+          </div></li>
+        </ol>
+        <div class="pre-header">bash → project layout</div>
+        <pre><code>mkdocs new .
+
+<span class="hl-c"># Output structure:</span>
+your-docs-repo/
+├── mkdocs.yml          <span class="hl-c"># site configuration</span>
+└── docs/
+    └── index.md        <span class="hl-c"># your first page</span></code></pre>
+
+        <ol class="step-list" start="4">
+          <li class="step"><div class="step-num">4</div><div class="step-body">
+            <strong>Configure your site</strong>
+            <p>Edit <code>mkdocs.yml</code> to set your site name, theme, and navigation. This is the single configuration file that controls the entire build.</p>
+          </div></li>
+        </ol>
+        <div class="pre-header">mkdocs.yml</div>
+        <pre><code><span class="hl-n">site_name</span>: <span class="hl-s">My Documentation</span>
+<span class="hl-n">site_url</span>: <span class="hl-s">https://your-username.github.io/your-docs-repo/</span>
+<span class="hl-n">theme</span>:
+  <span class="hl-n">name</span>: <span class="hl-s">material</span>
+  <span class="hl-n">palette</span>:
+    <span class="hl-n">scheme</span>: <span class="hl-s">slate</span>
+    <span class="hl-n">primary</span>: <span class="hl-s">amber</span>
+<span class="hl-n">nav</span>:
+  - <span class="hl-s">Home</span>: index.md
+  - <span class="hl-s">Getting Started</span>: getting-started.md</code></pre>
+
+        <ol class="step-list" start="5">
+          <li class="step"><div class="step-num">5</div><div class="step-body">
+            <strong>Preview locally, commit, and deploy</strong>
+            <p>Run the local server to preview your site, then commit and push. GitHub Actions will build and deploy to GitHub Pages automatically.</p>
+          </div></li>
+        </ol>
+        <div class="pre-header">bash</div>
+        <pre><code><span class="hl-c"># Preview locally on http://127.0.0.1:8000</span>
+mkdocs serve
+
+<span class="hl-c"># Commit and push</span>
+git add .
+git commit -m "docs: initialise documentation site"
+git push origin main
+
+<span class="hl-c"># Deploy to GitHub Pages manually (or via Actions)</span>
+mkdocs gh-deploy</code></pre>
+
+        <div class="callout tip">
+          <span class="callout-icon">✦</span>
+          <div class="callout-body">
+            <strong>Automate with GitHub Actions</strong>
+            <p>See the <span style="color:var(--accent);cursor:pointer;" onclick="navigate('cicd')">CI/CD Integration</span> guide to set up a GitHub Actions workflow that builds and deploys automatically on every push to <code>main</code>.</p>
+          </div>
+        </div>
+
+        <div class="page-nav">
+          <button class="page-nav-btn" onclick="navigate('what-is')"><span class="page-nav-label">← Previous</span><span class="page-nav-title">What is Docs-as-Code?</span></button>
+          <button class="page-nav-btn next" onclick="navigate('pipeline')"><span class="page-nav-label">Next →</span><span class="page-nav-title">The Docs Pipeline</span></button>
+        </div>
+      </div>
+
+      <!-- ══ PAGE: PIPELINE ══ -->
+      <div id="page-pipeline" class="page">
+        <div class="page-eyebrow">Core Concepts</div>
+        <h1>The Docs Pipeline</h1>
+        <p class="lead">The documentation pipeline is the automated workflow that takes a Markdown source file from a writer's editor to a published, validated, multi-format documentation site. It has five stages. Each stage is a quality gate — if a stage fails, the change does not proceed.</p>
+
+        <h2 id="stage1">Stage 1 — Write</h2>
+        <p>Authors write documentation in Markdown (or MDX for React-based portals, or YAML/JSON for OpenAPI specs). The source format is chosen for portability: it can be read by any text editor, diffed by any version control tool, and compiled by any documentation build engine.</p>
+        <p>Good documentation source files follow a consistent structure: a frontmatter block (title, description, last reviewed date), then the content using headings, paragraphs, code blocks, and tables. The platform's Live Editor provides a split-pane environment to write and preview simultaneously.</p>
+        <div class="pre-header">example — docs/api/authentication.md</div>
+        <pre><code><span class="hl-p">---</span>
+<span class="hl-n">title</span>: <span class="hl-s">Authentication</span>
+<span class="hl-n">description</span>: <span class="hl-s">How to authenticate API requests using Bearer tokens</span>
+<span class="hl-n">last_reviewed</span>: <span class="hl-s">2026-02-01</span>
+<span class="hl-p">---</span>
+
+<span class="hl-p"># Authentication</span>
+
+All API requests must include a valid Bearer token in the `Authorization` header...</code></pre>
+
+        <h2 id="stage2">Stage 2 — Commit &amp; Review</h2>
+        <p>Once the author is satisfied with a draft, they commit the change to a feature branch in Git and open a pull request. The pull request is the review interface: it shows exactly what changed (a readable diff of Markdown), allows inline comments on specific lines, and tracks when comments are resolved.</p>
+        <p>This stage enforces that no documentation reaches readers without being seen by at least one other person — whether a subject-matter expert, a peer writer, or an engineer who built the feature. The review history becomes a permanent record of editorial decisions.</p>
+
+        <h2 id="stage3">Stage 3 — Build</h2>
+        <p>When the pull request is opened, the CI pipeline triggers a build. The build engine (MkDocs, Sphinx, or Hugo depending on configuration) compiles all Markdown source files into the configured output formats. A successful build confirms that the site structure is valid and all referenced files exist.</p>
+
+        <h2 id="stage4">Stage 4 — Validate</h2>
+        <p>Validation runs in parallel with the build. The style linter (Vale) checks every changed file against the configured rule set. The link checker scans all internal and external links. Schema validators check OpenAPI specs. If any check fails, the CI run is marked failed and the pull request cannot merge until the issue is resolved.</p>
+        <div class="callout warning">
+          <span class="callout-icon">⚠</span>
+          <div class="callout-body">
+            <strong>Validation is non-optional</strong>
+            <p>Branch protection rules should require all CI checks to pass before a pull request can merge. This is what makes the pipeline a quality gate, not just a suggestion.</p>
+          </div>
+        </div>
+
+        <h2 id="stage5">Stage 5 — Publish</h2>
+        <p>When the pull request merges, the build and deploy workflow runs against the <code>main</code> branch. The compiled HTML site, PDF export, OpenAPI JSON, and search index are uploaded to the configured hosting target. The live site updates within minutes of the merge, with no manual intervention required.</p>
+
+        <div class="page-nav">
+          <button class="page-nav-btn" onclick="navigate('quickstart')"><span class="page-nav-label">← Previous</span><span class="page-nav-title">Quick Start Guide</span></button>
+          <button class="page-nav-btn next" onclick="navigate('version-control')"><span class="page-nav-label">Next →</span><span class="page-nav-title">Version Control</span></button>
+        </div>
+      </div>
+
+      <!-- ══ PAGE: VERSION CONTROL ══ -->
+      <div id="page-version-control" class="page">
+        <div class="page-eyebrow">Core Concepts</div>
+        <h1>Version Control for Documentation</h1>
+        <p class="lead">Storing documentation in Git gives every team member a complete, auditable history of every change ever made. This page explains the branching strategy, commit conventions, and pull request process used in this platform.</p>
+
+        <h2 id="branching">Branching Strategy</h2>
+        <table>
+          <thead><tr><th>Branch</th><th>Purpose</th><th>Merge target</th></tr></thead>
+          <tbody>
+            <tr><td><code>main</code></td><td>Always-publishable source of truth. Protected — no direct commits.</td><td>—</td></tr>
+            <tr><td><code>docs/feature-name</code></td><td>New content or significant updates to existing content</td><td><code>main</code></td></tr>
+            <tr><td><code>docs/fix-*</code></td><td>Typo fixes, broken link repairs, minor corrections</td><td><code>main</code></td></tr>
+            <tr><td><code>release/vX.Y</code></td><td>Versioned documentation snapshot for a product release</td><td><code>main</code></td></tr>
+          </tbody>
+        </table>
+
+        <h2 id="commits">Commit Conventions</h2>
+        <p>Consistent commit messages make the Git log readable and enable automated changelog generation. This platform follows a documentation-specific adaptation of Conventional Commits:</p>
+        <div class="pre-header">commit message format</div>
+        <pre><code><span class="hl-p">docs(scope): short description of the change</span>
+
+<span class="hl-c"># Examples:</span>
+docs(api): add rate limiting section to authentication page
+docs(getting-started): fix broken link to quickstart guide
+docs(compliance): update GDPR data residency table for EU region
+fix(linting): resolve Vale rule violation in webhook reference
+chore(config): update mkdocs.yml nav structure for v1.1</code></pre>
+
+        <h2 id="pr-process">Pull Request Process</h2>
+        <ol>
+          <li>Author opens a PR from their feature branch against <code>main</code></li>
+          <li>CI runs automatically — style lint, link check, build</li>
+          <li>At least one reviewer approves the content changes</li>
+          <li>All CI checks pass and review comments are resolved</li>
+          <li>Author or reviewer merges — deployment runs automatically</li>
+        </ol>
+
+        <div class="page-nav">
+          <button class="page-nav-btn" onclick="navigate('pipeline')"><span class="page-nav-label">← Previous</span><span class="page-nav-title">The Docs Pipeline</span></button>
+          <button class="page-nav-btn next" onclick="navigate('cicd')"><span class="page-nav-label">Next →</span><span class="page-nav-title">CI/CD Integration</span></button>
+        </div>
+      </div>
+
+      <!-- ══ PAGE: CI/CD ══ -->
+      <div id="page-cicd" class="page">
+        <div class="page-eyebrow">Core Concepts</div>
+        <h1>CI/CD Integration</h1>
+        <p class="lead">GitHub Actions powers the build, validate, and deploy stages of the pipeline. Every push to a pull request branch triggers validation. Every merge to <code>main</code> triggers a full build and deployment.</p>
+
+        <h2 id="workflow">GitHub Actions Workflow</h2>
+        <p>The following workflow file covers the full pipeline — linting, building, and deploying to GitHub Pages.</p>
+        <div class="pre-header">.github/workflows/docs.yml</div>
+        <pre><code><span class="hl-n">name</span>: <span class="hl-s">Docs CI/CD</span>
+
+<span class="hl-k">on</span>:
+  <span class="hl-n">push</span>:
+    <span class="hl-n">branches</span>: [<span class="hl-s">main</span>]
+  <span class="hl-n">pull_request</span>:
+    <span class="hl-n">branches</span>: [<span class="hl-s">main</span>]
+
+<span class="hl-k">jobs</span>:
+  <span class="hl-n">lint-and-build</span>:
+    <span class="hl-n">runs-on</span>: <span class="hl-s">ubuntu-latest</span>
+    <span class="hl-k">steps</span>:
+      - <span class="hl-n">uses</span>: <span class="hl-s">actions/checkout@v4</span>
+
+      - <span class="hl-n">name</span>: <span class="hl-s">Set up Python</span>
+        <span class="hl-n">uses</span>: <span class="hl-s">actions/setup-python@v5</span>
+        <span class="hl-k">with</span>:
+          <span class="hl-n">python-version</span>: <span class="hl-s">'3.12'</span>
+
+      - <span class="hl-n">name</span>: <span class="hl-s">Install dependencies</span>
+        <span class="hl-n">run</span>: <span class="hl-s">pip install mkdocs mkdocs-material</span>
+
+      - <span class="hl-n">name</span>: <span class="hl-s">Vale style lint</span>
+        <span class="hl-n">uses</span>: <span class="hl-s">errata-ai/vale-action@v2</span>
+        <span class="hl-k">with</span>:
+          <span class="hl-n">files</span>: <span class="hl-s">docs/</span>
+
+      - <span class="hl-n">name</span>: <span class="hl-s">Build documentation</span>
+        <span class="hl-n">run</span>: <span class="hl-s">mkdocs build --strict</span>
+
+      - <span class="hl-n">name</span>: <span class="hl-s">Deploy to GitHub Pages</span>
+        <span class="hl-k">if</span>: <span class="hl-s">github.ref == 'refs/heads/main'</span>
+        <span class="hl-n">run</span>: <span class="hl-s">mkdocs gh-deploy --force</span></code></pre>
+
+        <h2 id="triggers">Build Triggers</h2>
+        <table>
+          <thead><tr><th>Event</th><th>Jobs run</th><th>Deploys?</th></tr></thead>
+          <tbody>
+            <tr><td>Push to PR branch</td><td>Lint, build (strict mode)</td><td>No</td></tr>
+            <tr><td>Merge to <code>main</code></td><td>Lint, build, deploy</td><td>Yes → GitHub Pages</td></tr>
+            <tr><td>Manual trigger</td><td>Full pipeline</td><td>Yes</td></tr>
+          </tbody>
+        </table>
+
+        <div class="page-nav">
+          <button class="page-nav-btn" onclick="navigate('version-control')"><span class="page-nav-label">← Previous</span><span class="page-nav-title">Version Control</span></button>
+          <button class="page-nav-btn next" onclick="navigate('linting')"><span class="page-nav-label">Next →</span><span class="page-nav-title">Style Linting</span></button>
+        </div>
+      </div>
+
+      <!-- ══ PAGE: LINTING ══ -->
+      <div id="page-linting" class="page">
+        <div class="page-eyebrow">Core Concepts</div>
+        <h1>Style Linting with Vale</h1>
+        <p class="lead">Vale is a syntax-aware prose linter that enforces your documentation style guide automatically. It runs in CI on every pull request, catching inconsistencies before they reach readers — passive voice, banned terms, incorrect product names, and readability issues.</p>
+
+        <h2 id="config">Configuration</h2>
+        <div class="pre-header">.vale.ini</div>
+        <pre><code><span class="hl-n">StylesPath</span> = .vale/styles
+<span class="hl-n">MinAlertLevel</span> = suggestion
+
+<span class="hl-p">[*.md]</span>
+<span class="hl-n">BasedOnStyles</span> = <span class="hl-s">Vale, Google, DaC</span>
+<span class="hl-n">DaC.PassiveVoice</span> = <span class="hl-s">warning</span>
+<span class="hl-n">DaC.Terminology</span> = <span class="hl-s">error</span>
+<span class="hl-n">Google.Headings</span> = <span class="hl-s">suggestion</span></code></pre>
+
+        <h2 id="rule-types">Rule Categories</h2>
+        <table>
+          <thead><tr><th>Level</th><th>Behaviour</th><th>Example rules</th></tr></thead>
+          <tbody>
+            <tr><td><span class="badge" style="background:var(--red-dim);color:var(--red);">error</span></td><td>Fails the CI build — must fix before merge</td><td>Wrong product name, banned term, broken heading hierarchy</td></tr>
+            <tr><td><span class="badge badge-amber">warning</span></td><td>Reported in CI — should fix, does not block</td><td>Passive voice, "simply" / "just", future tense for features</td></tr>
+            <tr><td><span class="badge badge-blue">suggestion</span></td><td>Advisory — fix when practical</td><td>Sentence length, heading capitalisation, Oxford comma</td></tr>
+          </tbody>
+        </table>
+
+        <h2 id="examples">Common Violations &amp; Fixes</h2>
+        <div class="pre-header">passive voice — warning</div>
+        <pre><code><span class="hl-c"># ✗ Before</span>
+The request is authenticated by the server using a Bearer token.
+
+<span class="hl-c"># ✓ After</span>
+The server authenticates the request using a Bearer token.</code></pre>
+
+        <div class="pre-header">banned terminology — error</div>
+        <pre><code><span class="hl-c"># ✗ Before — "whitelist" is a banned term</span>
+Add your domain to the whitelist.
+
+<span class="hl-c"># ✓ After</span>
+Add your domain to the allowlist.</code></pre>
+
+        <div class="page-nav">
+          <button class="page-nav-btn" onclick="navigate('cicd')"><span class="page-nav-label">← Previous</span><span class="page-nav-title">CI/CD Integration</span></button>
+          <button class="page-nav-btn next" onclick="navigate('multiformat')"><span class="page-nav-label">Next →</span><span class="page-nav-title">Multi-Format Output</span></button>
+        </div>
+      </div>
+
+      <!-- ══ PAGE: MULTI-FORMAT ══ -->
+      <div id="page-multiformat" class="page">
+        <div class="page-eyebrow">Core Concepts</div>
+        <h1>Multi-Format Output</h1>
+        <p class="lead">A single Markdown source compiles into multiple output formats simultaneously. You write once, and the build pipeline produces an HTML documentation site, a PDF manual, an OpenAPI JSON specification, and a search index — all from the same source files.</p>
+
+        <h2 id="formats">Output Formats</h2>
+        <table>
+          <thead><tr><th>Format</th><th>Use case</th><th>Tool</th></tr></thead>
+          <tbody>
+            <tr><td><strong>HTML site</strong></td><td>Primary web documentation portal, hosted on GitHub Pages or Netlify</td><td>MkDocs / Material theme</td></tr>
+            <tr><td><strong>PDF manual</strong></td><td>Offline distribution, print, enterprise delivery</td><td>WeasyPrint or mkdocs-with-pdf</td></tr>
+            <tr><td><strong>OpenAPI JSON</strong></td><td>Machine-readable API spec for Postman, Swagger UI, SDK generation</td><td>Inline YAML → JSON conversion</td></tr>
+            <tr><td><strong>Search index</strong></td><td>Client-side full-text search, feeds the built-in portal search</td><td>MkDocs search plugin</td></tr>
+          </tbody>
+        </table>
+
+        <h2 id="configuration">Configuring Output Targets</h2>
+        <div class="pre-header">mkdocs.yml — output plugins</div>
+        <pre><code><span class="hl-n">plugins</span>:
+  - <span class="hl-s">search</span>
+  - <span class="hl-n">with-pdf</span>:
+      <span class="hl-n">author</span>: <span class="hl-s">Sulagna Sasmal</span>
+      <span class="hl-n">cover_title</span>: <span class="hl-s">Platform Documentation</span>
+      <span class="hl-n">output_path</span>: <span class="hl-s">pdf/platform-docs.pdf</span>
+  - <span class="hl-n">tags</span></code></pre>
+
+        <div class="callout info">
+          <span class="callout-icon">ℹ</span>
+          <div class="callout-body">
+            <strong>Single source principle</strong>
+            <p>Never maintain separate files for different output formats. If your PDF manual and HTML site have diverged, you have two sources of truth — which means you have none. The platform enforces single-source by generating all formats from the same pipeline run.</p>
+          </div>
+        </div>
+
+        <div class="page-nav">
+          <button class="page-nav-btn" onclick="navigate('linting')"><span class="page-nav-label">← Previous</span><span class="page-nav-title">Style Linting</span></button>
+          <button class="page-nav-btn next" onclick="navigate('mod-dashboard')"><span class="page-nav-label">Next →</span><span class="page-nav-title">Dashboard Module</span></button>
+        </div>
+      </div>
+
+      <!-- ══ PLATFORM MODULE PAGES ══ -->
+      <div id="page-mod-dashboard" class="page">
+        <div class="page-eyebrow">Platform Modules</div>
+        <h1>Dashboard</h1>
+        <p class="lead">The Dashboard is the command centre for your documentation project. It gives an at-a-glance view of build health, content coverage, contributor activity, and recent pipeline runs.</p>
+        <h2 id="metrics">Key Metrics</h2>
+        <table>
+          <thead><tr><th>Metric</th><th>What it tells you</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Build Status</strong></td><td>Pass / fail of the last CI run, with link to logs</td></tr>
+            <tr><td><strong>Content Coverage</strong></td><td>Percentage of API endpoints, features, or topics with documentation</td></tr>
+            <tr><td><strong>Lint Score</strong></td><td>Number of open style warnings and errors across all files</td></tr>
+            <tr><td><strong>Active Contributors</strong></td><td>Authors with commits in the last 30 days</td></tr>
+            <tr><td><strong>Last Published</strong></td><td>Timestamp of the most recent successful deploy</td></tr>
+          </tbody>
+        </table>
+        <div class="page-nav">
+          <button class="page-nav-btn" onclick="navigate('multiformat')"><span class="page-nav-label">← Previous</span><span class="page-nav-title">Multi-Format Output</span></button>
+          <button class="page-nav-btn next" onclick="navigate('mod-editor')"><span class="page-nav-label">Next →</span><span class="page-nav-title">Live Editor</span></button>
+        </div>
+      </div>
+
+      <div id="page-mod-editor" class="page">
+        <div class="page-eyebrow">Platform Modules</div>
+        <h1>Live Editor</h1>
+        <p class="lead">The Live Editor is a split-pane Markdown authoring environment with real-time HTML preview and inline Vale linting. Authors can write, preview, and fix style issues without leaving the browser.</p>
+        <h2 id="editor-features">Features</h2>
+        <ul>
+          <li><strong>Split-pane view</strong> — Markdown source on the left, rendered HTML preview on the right, updated on every keystroke</li>
+          <li><strong>Frontmatter validation</strong> — highlights missing or malformed frontmatter fields before saving</li>
+          <li><strong>Inline lint markers</strong> — Vale violations are underlined in the editor with hover explanations</li>
+          <li><strong>Keyboard shortcuts</strong> — standard editor shortcuts for bold, italic, code, links, and headings</li>
+          <li><strong>Export</strong> — download the current file as <code>.md</code> or copy the rendered HTML</li>
+        </ul>
+        <div class="callout tip">
+          <span class="callout-icon">✦</span>
+          <div class="callout-body">
+            <strong>Use the editor for drafts</strong>
+            <p>The Live Editor is best used for initial drafting and quick edits. For complex multi-file changes, work in your local editor with the Vale VS Code extension, then commit through your normal Git workflow.</p>
+          </div>
+        </div>
+        <div class="page-nav">
+          <button class="page-nav-btn" onclick="navigate('mod-dashboard')"><span class="page-nav-label">← Previous</span><span class="page-nav-title">Dashboard</span></button>
+          <button class="page-nav-btn next" onclick="navigate('mod-contentmap')"><span class="page-nav-label">Next →</span><span class="page-nav-title">Content Map</span></button>
+        </div>
+      </div>
+
+      <div id="page-mod-contentmap" class="page">
+        <div class="page-eyebrow">Platform Modules</div>
+        <h1>Content Map</h1>
+        <p class="lead">The Content Map is a visual representation of your entire documentation structure — every page, its position in the hierarchy, its status, and its relationships to other pages.</p>
+        <h2 id="what-it-shows">What It Shows</h2>
+        <ul>
+          <li><strong>Doc tree</strong> — full navigation hierarchy rendered as an interactive graph</li>
+          <li><strong>Orphaned pages</strong> — pages that exist in the <code>docs/</code> folder but are not referenced in the nav</li>
+          <li><strong>Broken cross-references</strong> — internal links that point to pages that do not exist</li>
+          <li><strong>Coverage gaps</strong> — sections of the nav that have placeholder stubs rather than full content</li>
+          <li><strong>Page metadata</strong> — last edited date, word count, lint status per page</li>
+        </ul>
+        <div class="page-nav">
+          <button class="page-nav-btn" onclick="navigate('mod-editor')"><span class="page-nav-label">← Previous</span><span class="page-nav-title">Live Editor</span></button>
+          <button class="page-nav-btn next" onclick="navigate('mod-linter')"><span class="page-nav-label">Next →</span><span class="page-nav-title">Style Linter</span></button>
+        </div>
+      </div>
+
+      <div id="page-mod-linter" class="page">
+        <div class="page-eyebrow">Platform Modules</div>
+        <h1>Style Linter Module</h1>
+        <p class="lead">The Style Linter module provides an interactive view of all active Vale rules, current violations across the codebase, and the ability to run a lint pass against any file on demand.</p>
+        <h2 id="linter-panel">Panel Layout</h2>
+        <ul>
+          <li><strong>Rule browser</strong> — lists all active rules with their severity, description, and example violations</li>
+          <li><strong>Violations panel</strong> — all current lint issues grouped by file, filterable by severity</li>
+          <li><strong>Run on file</strong> — paste or select a file path and run Vale against it immediately</li>
+          <li><strong>Suppression manager</strong> — view and manage inline <code>vale off / vale on</code> suppressions across the codebase</li>
+        </ul>
+        <p>For the full Vale configuration reference, see the <span style="color:var(--accent);cursor:pointer;" onclick="navigate('linting')">Style Linting</span> core concepts page.</p>
+        <div class="page-nav">
+          <button class="page-nav-btn" onclick="navigate('mod-contentmap')"><span class="page-nav-label">← Previous</span><span class="page-nav-title">Content Map</span></button>
+          <button class="page-nav-btn next" onclick="navigate('mod-outputs')"><span class="page-nav-label">Next →</span><span class="page-nav-title">Build Outputs</span></button>
+        </div>
+      </div>
+
+      <div id="page-mod-outputs" class="page">
+        <div class="page-eyebrow">Platform Modules</div>
+        <h1>Build Outputs</h1>
+        <p class="lead">The Build Outputs module shows every artefact produced by the last successful pipeline run — with a preview, file size, and direct download or deploy link for each format.</p>
+        <h2 id="output-types">Available Outputs</h2>
+        <table>
+          <thead><tr><th>Output</th><th>Description</th><th>Typical size</th></tr></thead>
+          <tbody>
+            <tr><td><strong>HTML Site</strong></td><td>Full static site ready for hosting. Includes search index and all assets.</td><td>2–15 MB</td></tr>
+            <tr><td><strong>PDF Manual</strong></td><td>Print-ready PDF with auto ToC, page numbers, and chapter breaks.</td><td>1–8 MB</td></tr>
+            <tr><td><strong>OpenAPI JSON</strong></td><td>Machine-readable API spec for Postman, Swagger UI, and SDK generation.</td><td>50–500 KB</td></tr>
+            <tr><td><strong>Search Index</strong></td><td>JSON index file for client-side full-text search.</td><td>100–800 KB</td></tr>
+          </tbody>
+        </table>
+        <div class="page-nav">
+          <button class="page-nav-btn" onclick="navigate('mod-linter')"><span class="page-nav-label">← Previous</span><span class="page-nav-title">Style Linter</span></button>
+          <button class="page-nav-btn next" onclick="navigate('mod-config')"><span class="page-nav-label">Next →</span><span class="page-nav-title">Configuration</span></button>
+        </div>
+      </div>
+
+      <div id="page-mod-config" class="page">
+        <div class="page-eyebrow">Platform Modules</div>
+        <h1>Configuration Module</h1>
+        <p class="lead">The Configuration module provides a visual editor for the platform's <code>docs-center.config.yml</code> file — the single source of truth for site settings, navigation, theme, lint rules, and deploy targets.</p>
+        <h2 id="config-sections">Configuration Sections</h2>
+        <ul>
+          <li><strong>Site metadata</strong> — name, URL, description, author, copyright</li>
+          <li><strong>Navigation</strong> — page hierarchy, external links, nav sections</li>
+          <li><strong>Theme</strong> — colour palette, logo, font, feature flags</li>
+          <li><strong>Lint rules</strong> — active Vale style sets, severity overrides, suppression list</li>
+          <li><strong>Build plugins</strong> — PDF export, search, tags, social cards</li>
+          <li><strong>Deploy targets</strong> — GitHub Pages, Netlify site ID, S3 bucket</li>
+        </ul>
+        <p>For the full configuration schema reference, see the <span style="color:var(--accent);cursor:pointer;" onclick="navigate('ref-config')">Config Schema</span> reference page.</p>
+        <div class="page-nav">
+          <button class="page-nav-btn" onclick="navigate('mod-outputs')"><span class="page-nav-label">← Previous</span><span class="page-nav-title">Build Outputs</span></button>
+          <button class="page-nav-btn next" onclick="navigate('ref-config')"><span class="page-nav-label">Next →</span><span class="page-nav-title">Config Schema</span></button>
+        </div>
+      </div>
+
+      <!-- ══ PAGE: REFERENCE — CONFIG ══ -->
+      <div id="page-ref-config" class="page">
+        <div class="page-eyebrow">Reference</div>
+        <h1>Configuration Schema</h1>
+        <p class="lead">Complete reference for all fields in <code>docs-center.config.yml</code>. All fields are optional unless marked <span class="badge" style="background:var(--red-dim);color:var(--red);">required</span>.</p>
+        <h2 id="top-level">Top-Level Fields</h2>
+        <table>
+          <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>site_name</code> <span class="badge" style="background:var(--red-dim);color:var(--red);">required</span></td><td>string</td><td>Display name of the documentation site</td></tr>
+            <tr><td><code>site_url</code></td><td>string</td><td>Canonical URL — used in sitemap and social meta tags</td></tr>
+            <tr><td><code>site_description</code></td><td>string</td><td>Short description for SEO and portal header</td></tr>
+            <tr><td><code>site_author</code></td><td>string</td><td>Author name for PDF cover and page meta</td></tr>
+            <tr><td><code>docs_dir</code></td><td>string</td><td>Directory containing Markdown source files. Default: <code>docs/</code></td></tr>
+            <tr><td><code>site_dir</code></td><td>string</td><td>Directory for compiled output. Default: <code>site/</code></td></tr>
+          </tbody>
+        </table>
+        <h2 id="theme-config">Theme</h2>
+        <div class="pre-header">docs-center.config.yml — theme section</div>
+        <pre><code><span class="hl-n">theme</span>:
+  <span class="hl-n">name</span>: <span class="hl-s">material</span>
+  <span class="hl-n">palette</span>:
+    <span class="hl-n">scheme</span>: <span class="hl-s">slate</span>          <span class="hl-c"># dark mode</span>
+    <span class="hl-n">primary</span>: <span class="hl-s">amber</span>
+    <span class="hl-n">accent</span>: <span class="hl-s">amber</span>
+  <span class="hl-n">font</span>:
+    <span class="hl-n">text</span>: <span class="hl-s">Inter</span>
+    <span class="hl-n">code</span>: <span class="hl-s">JetBrains Mono</span>
+  <span class="hl-n">features</span>:
+    - <span class="hl-s">navigation.tabs</span>
+    - <span class="hl-s">navigation.top</span>
+    - <span class="hl-s">content.code.copy</span>
+    - <span class="hl-s">search.highlight</span></code></pre>
+        <div class="page-nav">
+          <button class="page-nav-btn" onclick="navigate('mod-config')"><span class="page-nav-label">← Previous</span><span class="page-nav-title">Configuration Module</span></button>
+          <button class="page-nav-btn next" onclick="navigate('ref-changelog')"><span class="page-nav-label">Next →</span><span class="page-nav-title">Changelog</span></button>
+        </div>
+      </div>
+
+      <!-- ══ PAGE: CHANGELOG ══ -->
+      <div id="page-ref-changelog" class="page">
+        <div class="page-eyebrow">Reference</div>
+        <h1>Changelog</h1>
+        <p class="lead">All notable changes to the Docs-as-Code Platform are documented here. This project follows <a href="https://keepachangelog.com" target="_blank">Keep a Changelog</a> and <a href="https://semver.org" target="_blank">Semantic Versioning</a>.</p>
+
+        <h2 id="v1-0">v1.0.0 — 2026-02-28 <span class="badge badge-green" style="margin-left:8px;">Stable</span></h2>
+        <h3>Added</h3>
+        <ul>
+          <li>Initial release of the Docs-as-Code Platform documentation portal</li>
+          <li>Getting Started section: Introduction, What is Docs-as-Code, Quick Start Guide</li>
+          <li>Core Concepts: Pipeline, Version Control, CI/CD Integration, Style Linting, Multi-Format Output</li>
+          <li>Platform Module guides: Dashboard, Live Editor, Content Map, Style Linter, Build Outputs, Configuration</li>
+          <li>Reference: Configuration Schema, Changelog</li>
+          <li>GitHub Actions workflow example for full CI/CD pipeline</li>
+          <li>Vale configuration examples with rule severity table</li>
+          <li>Before/after examples for common lint violations</li>
+          <li>Branching strategy and commit convention reference</li>
+        </ul>
+        <h3>Platform</h3>
+        <ul>
+          <li>Dark amber theme consistent with VaultPay and CaseForge portfolio sites</li>
+          <li>Fully interactive single-page navigation with dynamic table of contents</li>
+          <li>Responsive layout — sidebar and TOC hide on smaller screens</li>
+          <li>Hosted on GitHub Pages via <code>SulagnaSasmal/docs-as-code-portal</code></li>
+        </ul>
+
+        <div class="page-nav">
+          <button class="page-nav-btn" onclick="navigate('ref-config')"><span class="page-nav-label">← Previous</span><span class="page-nav-title">Config Schema</span></button>
+          <span></span>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- ═══════ TABLE OF CONTENTS ═══════ -->
+    <aside class="toc-rail">
+      <div class="toc-title">On this page</div>
+      <ul class="toc-list" id="toc-list"></ul>
+    </aside>
+  </div>
+</div>
+
+<script>
+const pages = {
+  'intro':           { prev: null,              next: 'what-is' },
+  'what-is':         { prev: 'intro',           next: 'quickstart' },
+  'quickstart':      { prev: 'what-is',         next: 'pipeline' },
+  'pipeline':        { prev: 'quickstart',      next: 'version-control' },
+  'version-control': { prev: 'pipeline',        next: 'cicd' },
+  'cicd':            { prev: 'version-control', next: 'linting' },
+  'linting':         { prev: 'cicd',            next: 'multiformat' },
+  'multiformat':     { prev: 'linting',         next: 'mod-dashboard' },
+  'mod-dashboard':   { prev: 'multiformat',     next: 'mod-editor' },
+  'mod-editor':      { prev: 'mod-dashboard',   next: 'mod-contentmap' },
+  'mod-contentmap':  { prev: 'mod-editor',      next: 'mod-linter' },
+  'mod-linter':      { prev: 'mod-contentmap',  next: 'mod-outputs' },
+  'mod-outputs':     { prev: 'mod-linter',      next: 'mod-config' },
+  'mod-config':      { prev: 'mod-outputs',     next: 'ref-config' },
+  'ref-config':      { prev: 'mod-config',      next: 'ref-changelog' },
+  'ref-changelog':   { prev: 'ref-config',      next: null }
+};
+
+let currentPage = 'intro';
+
+function navigate(id) {
+  // hide current page
+  const prev = document.getElementById('page-' + currentPage);
+  if (prev) prev.classList.remove('active');
+
+  // show new page
+  const next = document.getElementById('page-' + id);
+  if (!next) return;
+  next.classList.add('active');
+  currentPage = id;
+
+  // update sidebar
+  document.querySelectorAll('.nav-link').forEach(el => {
+    el.classList.toggle('active', el.getAttribute('onclick') === `navigate('${id}')`);
+  });
+
+  // scroll main to top
+  document.getElementById('main-content').scrollTop = 0;
+
+  // build TOC from h2 headings of active page
+  buildTOC(next);
+}
+
+function buildTOC(pageEl) {
+  const list = document.getElementById('toc-list');
+  list.innerHTML = '';
+  const headings = pageEl.querySelectorAll('h2, h3');
+  headings.forEach(h => {
+    const li = document.createElement('li');
+    const a = document.createElement('a');
+    a.className = 'toc-link' + (h.tagName === 'H3' ? ' sub' : '');
+    a.textContent = h.textContent;
+    a.href = '#';
+    a.onclick = (e) => {
+      e.preventDefault();
+      h.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+    li.appendChild(a);
+    list.appendChild(li);
+  });
+}
+
+// Init
+buildTOC(document.getElementById('page-intro'));
+</script>
+</body>
+</html>
