@@ -187,7 +187,48 @@ body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--tex
 /* ── RESPONSIVE ── */
 @media (max-width: 1100px) { .toc-rail { display: none; } }
 @media (max-width: 768px) { .sidebar { display: none; } .main { padding: 1.5rem; } .topbar-center { display: none; } }
+
+/* ── LIGHT THEME ── */
+[data-theme="light"] {
+  --bg:          #f6f8fa;
+  --bg-sidebar:  #ffffff;
+  --bg-surface:  #eaeef2;
+  --bg-elevated: #e2e6ea;
+  --bg-code:     #0f172a;
+  --border:      #d0d7de;
+  --border-light:#b0b8c2;
+  --text:        #1f2328;
+  --text-secondary: #424a53;
+  --text-muted:  #636c76;
+  --accent:      #b45309;
+  --accent-dim:  rgba(180,83,9,0.1);
+  --accent-glow: rgba(180,83,9,0.2);
+  --green:       #1a7f37;
+  --green-dim:   rgba(26,127,55,0.1);
+  --blue:        #0969da;
+  --blue-dim:    rgba(9,105,218,0.1);
+  --red:         #cf222e;
+  --red-dim:     rgba(207,34,46,0.1);
+}
+[data-theme="light"] body { background: var(--bg); color: var(--text); }
+[data-theme="light"] .topbar { background: rgba(246,248,250,0.95); border-bottom-color: var(--border); }
+[data-theme="light"] .sidebar { background: var(--bg-sidebar); border-right-color: var(--border); }
+[data-theme="light"] .brand-name { color: var(--text); }
+
+/* Theme toggle */
+.theme-toggle {
+  display: flex; align-items: center;
+  padding: 5px 10px;
+  border-radius: 7px; font-size: 13px;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  transition: all 0.2s;
+}
+.theme-toggle:hover { border-color: var(--border-light); color: var(--text); }
 </style>
+<script>(function(){var t=localStorage.getItem("dac-theme");if(t)document.documentElement.setAttribute("data-theme",t);else if(window.matchMedia("(prefers-color-scheme:dark)").matches)document.documentElement.setAttribute("data-theme","dark");else document.documentElement.setAttribute("data-theme","light");})()</script>
 </head>
 <body>
 
@@ -211,6 +252,7 @@ body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--tex
     <span class="badge badge-green">v1.0 · Stable</span>
     <a href="https://sulagnasasmal.github.io/Documentation-Center-Platform/docforge-platform.html" target="_blank" class="topbar-cta">Try Dashboard →</a>
     <a href="https://github.com/SulagnaSasmal" target="_blank" class="topbar-link">⌥ GitHub</a>
+    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">&#9680;</button>
   </div>
 </header>
 
@@ -1034,6 +1076,20 @@ function buildTOC(pageEl) {
 
 // Init
 buildTOC(document.getElementById('page-intro'));
+</script>
+<script>
+(function(){
+  var btn=document.getElementById("theme-toggle");
+  if(!btn)return;
+  function upd(){btn.textContent=document.documentElement.getAttribute("data-theme")==="dark"?"\u2600":"\u25D0";}
+  upd();
+  btn.addEventListener("click",function(){
+    var n=document.documentElement.getAttribute("data-theme")==="dark"?"light":"dark";
+    document.documentElement.setAttribute("data-theme",n);
+    localStorage.setItem("dac-theme",n);
+    upd();
+  });
+})();
 </script>
 </body>
 </html>
