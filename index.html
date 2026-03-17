@@ -227,6 +227,20 @@ body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--tex
   transition: all 0.2s;
 }
 .theme-toggle:hover { border-color: var(--border-light); color: var(--text); }
+/* Footer */
+.site-footer {
+  padding: 1.25rem 2rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: space-between;
+  align-items: center;
+}
+.site-footer a { color: var(--accent); text-decoration: none; }
+.site-footer a:hover { text-decoration: underline; }
 </style>
 <script>(function(){var t=localStorage.getItem("dac-theme");if(t)document.documentElement.setAttribute("data-theme",t);else if(window.matchMedia("(prefers-color-scheme:dark)").matches)document.documentElement.setAttribute("data-theme","dark");else document.documentElement.setAttribute("data-theme","light");})()</script>
 </head>
@@ -1003,12 +1017,19 @@ Add your domain to the allowlist.</code></pre>
     </main>
 
     <!-- ═══════ TABLE OF CONTENTS ═══════ -->
+
     <aside class="toc-rail">
       <div class="toc-title">On this page</div>
       <ul class="toc-list" id="toc-list"></ul>
     </aside>
   </div>
 </div>
+
+<footer class="site-footer">
+  <span>&copy; <span id="footer-yr"></span> Sulagna Sasmal. All rights reserved. Personal portfolio project for demonstration purposes only. Not affiliated with any organization.</span>
+  <a href="https://sulagnasasmal.com/" target="_blank" rel="noopener">sulagnasasmal.com</a>
+</footer>
+<script>var e=document.getElementById("footer-yr");if(e)e.textContent=new Date().getFullYear();</script>
 
 <script>
 const pages = {
