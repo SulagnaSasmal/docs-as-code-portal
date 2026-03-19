@@ -186,8 +186,32 @@ body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--tex
 .badge-blue { background: var(--blue-dim); color: var(--blue); }
 
 /* ── RESPONSIVE ── */
+/* ── HAMBURGER TOGGLE ── */
+.menu-toggle { display: none; background: none; border: 1px solid var(--border); color: var(--text-secondary); width: 36px; height: 36px; border-radius: 7px; cursor: pointer; font-size: 1.1rem; align-items: center; justify-content: center; transition: border-color 0.2s, color 0.2s; flex-shrink: 0; }
+.menu-toggle:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ── FOCUS STATES ── */
+.nav-link:focus-visible, .card:focus-visible, .page-nav-btn:focus-visible, .theme-toggle:focus-visible, .menu-toggle:focus-visible, .topbar-link:focus-visible, .topbar-cta:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 7px; }
+
+/* ── RESPONSIVE ── */
 @media (max-width: 1100px) { .toc-rail { display: none; } }
-@media (max-width: 768px) { .sidebar { display: none; } .main { padding: 1.5rem; } .topbar-center { display: none; } }
+@media (max-width: 900px) { .card-grid { grid-template-columns: 1fr; } .pipeline-vis { flex-wrap: wrap; } .pipe-step { min-width: 45%; border-bottom: 1px solid var(--border); } .pipe-step:last-child { border-bottom: none; } .pipe-arrow { display: none; } }
+@media (max-width: 768px) {
+  .sidebar { position: fixed; top: var(--topbar-h); left: 0; bottom: 0; width: var(--sidebar-w); z-index: 90; transform: translateX(-100%); transition: transform 0.25s ease; }
+  .sidebar.open { transform: translateX(0); box-shadow: 4px 0 24px rgba(0,0,0,0.3); }
+  .sidebar-overlay { display: none; position: fixed; inset: 0; top: var(--topbar-h); background: rgba(0,0,0,0.4); z-index: 89; }
+  .sidebar-overlay.open { display: block; }
+  .menu-toggle { display: flex; }
+  .main { padding: 1.5rem 1.25rem; }
+  .topbar-center { display: none; }
+  .topbar-right .topbar-link,
+  .topbar-right .topbar-cta,
+  .topbar-right .badge { display: none; }
+  .page h1 { font-size: 1.5rem; }
+  .page-nav { flex-direction: column; gap: 0.75rem; }
+  .page-nav-btn { max-width: 100%; }
+  .page-nav-btn.next { text-align: left; margin-left: 0; }
+}
 
 /* ── LIGHT THEME ── */
 [data-theme="light"] {
@@ -215,6 +239,18 @@ body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--tex
 [data-theme="light"] .topbar { background: rgba(246,248,250,0.95); border-bottom-color: var(--border); }
 [data-theme="light"] .sidebar { background: var(--bg-sidebar); border-right-color: var(--border); }
 [data-theme="light"] .brand-name { color: var(--text); }
+[data-theme="light"] .page h1,
+[data-theme="light"] .page h2 { color: var(--text); }
+[data-theme="light"] .card-title { color: var(--text); }
+[data-theme="light"] .pipe-step-name { color: var(--text); }
+[data-theme="light"] .page pre code { color: #e2e2f0; }
+[data-theme="light"] .pre-header { background: var(--bg-elevated); border-color: var(--border); color: var(--text-muted); }
+[data-theme="light"] .page-nav-title { color: var(--text); }
+[data-theme="light"] .step-body strong { color: var(--text); }
+[data-theme="light"] .toc-rail { border-left-color: var(--border); }
+[data-theme="light"] .nav-link:hover { background: rgba(0,0,0,0.04); }
+[data-theme="light"] .page tr:hover td { background: rgba(0,0,0,0.03); }
+[data-theme="light"] .card:hover { border-color: rgba(180,83,9,0.35); }
 
 /* Theme toggle */
 .theme-toggle {
@@ -250,6 +286,7 @@ body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--tex
 <!-- ═══════ TOPBAR ═══════ -->
 <header class="topbar">
   <div class="topbar-left">
+    <button class="menu-toggle" id="menu-toggle" aria-label="Toggle navigation">&#9776;</button>
     <div class="brand-icon">DaC</div>
     <div class="brand-text">
       <span class="brand-name">Docs-as-Code Reference</span>
@@ -278,7 +315,8 @@ body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--tex
 <div class="wrapper">
 
   <!-- ═══════ SIDEBAR ═══════ -->
-  <aside class="sidebar">
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+  <aside class="sidebar" id="sidebar">
     <div class="nav-group">
       <div class="nav-group-title">Getting Started</div>
       <div class="nav-link active" onclick="navigate('intro')">Introduction</div>
@@ -1114,6 +1152,17 @@ buildTOC(document.getElementById('page-intro'));
     localStorage.setItem("dac-theme",n);
     upd();
   });
+})();
+</script>
+<script>
+(function(){
+  var btn=document.getElementById('menu-toggle'),sb=document.getElementById('sidebar'),ov=document.getElementById('sidebar-overlay');
+  if(!btn||!sb)return;
+  function toggle(){sb.classList.toggle('open');ov.classList.toggle('open');}
+  function close(){sb.classList.remove('open');ov.classList.remove('open');}
+  btn.addEventListener('click',toggle);
+  ov.addEventListener('click',close);
+  sb.querySelectorAll('.nav-link').forEach(function(l){l.addEventListener('click',close);});
 })();
 </script>
 </body>
