@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Docs-as-Code Platform — Documentation</title>
+<title>Docs-as-Code Platform: Documentation</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📐</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -367,7 +367,7 @@ body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--tex
 
         <h2 id="what-is">What Is This Platform?</h2>
         <p>The Docs-as-Code Platform is a purpose-built system for teams who want their documentation to behave like their code. Instead of managing docs in shared Word files, disconnected wikis, or manual CMS tools, this platform treats every document as source code — stored in Git, reviewed via pull requests, tested through a CI/CD pipeline, and deployed automatically to multiple output formats.</p>
-        <p>It was designed and built by <strong>Sulagna Sasmal</strong>, a Technical Writer and Documentation Engineer specialising in fintech, compliance platforms, and developer-facing APIs. The platform reflects how documentation should work in regulated, engineering-led organisations.</p>
+        <p>It was designed and built by <strong>Sulagna Sasmal</strong>, a Technical Writer and Documentation Engineer specializing in fintech, compliance platforms, and developer-facing APIs. The platform reflects how documentation should work in regulated, engineering-led organizations.</p>
 
         <div class="callout info">
           <span class="callout-icon">ℹ</span>
@@ -378,13 +378,13 @@ body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--tex
         </div>
 
         <h2 id="purpose">Purpose &amp; Goals</h2>
-        <p>Documentation fails organisations for predictable reasons: it goes out of date immediately after release, no one knows what changed or when, quality is inconsistent across authors, and publishing is a slow manual process. This platform was built to solve each of those problems systematically.</p>
+        <p>Documentation fails organizations for predictable reasons: it goes out of date immediately after release, no one knows what changed or when, quality is inconsistent across authors, and publishing is a slow manual process. This platform was built to solve each of those problems systematically.</p>
         <ul>
-          <li><strong>Single source of truth</strong> — one Markdown source compiles to every output format. No copy-paste drift between the web portal, PDF, and API spec.</li>
-          <li><strong>Full audit history</strong> — every change is tracked in Git with author, timestamp, and commit message. Critical for regulated industries like financial services and healthcare.</li>
-          <li><strong>Automated quality gates</strong> — style linting, broken-link detection, and structural validation run on every commit before anything reaches readers.</li>
-          <li><strong>Continuous publishing</strong> — docs go live the moment a pull request merges. No manual export steps, no publishing queues, no staging servers to manage.</li>
-          <li><strong>Developer-native workflow</strong> — writers work in the same tools engineers use. Docs ship alongside the feature, not weeks after.</li>
+          <li><strong>Single source of truth</strong>: one Markdown source compiles to every output format. No copy-paste drift between the web portal, PDF, and API spec.</li>
+          <li><strong>Full audit history</strong>: every change is tracked in Git with author, timestamp, and commit message. Critical for regulated industries like financial services and healthcare.</li>
+          <li><strong>Automated quality gates</strong>: style linting, broken-link detection, and structural validation run on every commit before anything reaches readers.</li>
+          <li><strong>Continuous publishing</strong>: docs go live the moment a pull request merges. No manual export steps, no publishing queues, no staging servers to manage.</li>
+          <li><strong>Developer-native workflow</strong>: writers work in the same tools engineers use. Docs ship alongside the feature, not weeks after.</li>
         </ul>
 
         <h2 id="who">Who Is This For?</h2>
@@ -490,11 +490,11 @@ body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--tex
           <thead><tr><th>Area</th><th>Traditional Documentation</th><th>Docs-as-Code</th></tr></thead>
           <tbody>
             <tr><td><strong>Source format</strong></td><td>Word, PDF, wiki markup</td><td>Markdown / MDX / OpenAPI</td></tr>
-            <tr><td><strong>Version control</strong></td><td>File naming (v2_FINAL.docx)</td><td>Git — full history, branches, tags</td></tr>
+            <tr><td><strong>Version control</strong></td><td>File naming (v2_FINAL.docx)</td><td>Git: full history, branches, tags</td></tr>
             <tr><td><strong>Review process</strong></td><td>Email chains, tracked changes</td><td>Pull requests with inline comments</td></tr>
             <tr><td><strong>Quality checks</strong></td><td>Manual proofreading</td><td>Automated lint, link checks, CI</td></tr>
             <tr><td><strong>Publishing</strong></td><td>Manual export and upload</td><td>Automatic on merge</td></tr>
-            <tr><td><strong>Audit trail</strong></td><td>None or fragmented</td><td>Complete — every commit is signed</td></tr>
+            <tr><td><strong>Audit trail</strong></td><td>None or fragmented</td><td>Complete: every commit is signed</td></tr>
             <tr><td><strong>Multi-format output</strong></td><td>Maintain separate files per format</td><td>One source → HTML, PDF, JSON, search index</td></tr>
             <tr><td><strong>Collaboration</strong></td><td>One person edits at a time</td><td>Parallel branches, no conflicts until merge</td></tr>
           </tbody>
@@ -568,7 +568,7 @@ cd your-docs-repo</code></pre>
 
         <ol class="step-list" start="3">
           <li class="step"><div class="step-num">3</div><div class="step-body">
-            <strong>Initialise the project structure</strong>
+            <strong>Initialize the project structure</strong>
             <p>Run <code>mkdocs new .</code> to scaffold the config file and <code>docs/</code> directory. Your first document is created automatically.</p>
           </div></li>
         </ol>
@@ -611,7 +611,7 @@ mkdocs serve
 
 <span class="hl-c"># Commit and push</span>
 git add .
-git commit -m "docs: initialise documentation site"
+git commit -m "docs: initialize documentation site"
 git push origin main
 
 <span class="hl-c"># Deploy to GitHub Pages manually (or via Actions)</span>
@@ -637,10 +637,10 @@ mkdocs gh-deploy</code></pre>
         <h1>The Docs Pipeline</h1>
         <p class="lead">The documentation pipeline is the automated workflow that takes a Markdown source file from a writer's editor to a published, validated, multi-format documentation site. It has five stages. Each stage is a quality gate — if a stage fails, the change does not proceed.</p>
 
-        <h2 id="stage1">Stage 1 — Write</h2>
+        <h2 id="stage1">Stage 1: Write</h2>
         <p>Authors write documentation in Markdown (or MDX for React-based portals, or YAML/JSON for OpenAPI specs). The source format is chosen for portability: it can be read by any text editor, diffed by any version control tool, and compiled by any documentation build engine.</p>
         <p>Good documentation source files follow a consistent structure: a frontmatter block (title, description, last reviewed date), then the content using headings, paragraphs, code blocks, and tables. The platform's Live Editor provides a split-pane environment to write and preview simultaneously.</p>
-        <div class="pre-header">example — docs/api/authentication.md</div>
+        <div class="pre-header">Example: docs/api/authentication.md</div>
         <pre><code><span class="hl-p">---</span>
 <span class="hl-n">title</span>: <span class="hl-s">Authentication</span>
 <span class="hl-n">description</span>: <span class="hl-s">How to authenticate API requests using Bearer tokens</span>
@@ -651,14 +651,14 @@ mkdocs gh-deploy</code></pre>
 
 All API requests must include a valid Bearer token in the `Authorization` header...</code></pre>
 
-        <h2 id="stage2">Stage 2 — Commit &amp; Review</h2>
+        <h2 id="stage2">Stage 2: Commit &amp; Review</h2>
         <p>Once the author is satisfied with a draft, they commit the change to a feature branch in Git and open a pull request. The pull request is the review interface: it shows exactly what changed (a readable diff of Markdown), allows inline comments on specific lines, and tracks when comments are resolved.</p>
         <p>This stage enforces that no documentation reaches readers without being seen by at least one other person — whether a subject-matter expert, a peer writer, or an engineer who built the feature. The review history becomes a permanent record of editorial decisions.</p>
 
-        <h2 id="stage3">Stage 3 — Build</h2>
+        <h2 id="stage3">Stage 3: Build</h2>
         <p>When the pull request is opened, the CI pipeline triggers a build. The build engine (MkDocs, Sphinx, or Hugo depending on configuration) compiles all Markdown source files into the configured output formats. A successful build confirms that the site structure is valid and all referenced files exist.</p>
 
-        <h2 id="stage4">Stage 4 — Validate</h2>
+        <h2 id="stage4">Stage 4: Validate</h2>
         <p>Validation runs in parallel with the build. The style linter (Vale) checks every changed file against the configured rule set. The link checker scans all internal and external links. Schema validators check OpenAPI specs. If any check fails, the CI run is marked failed and the pull request cannot merge until the issue is resolved.</p>
         <div class="callout warning">
           <span class="callout-icon">⚠</span>
@@ -668,7 +668,7 @@ All API requests must include a valid Bearer token in the `Authorization` header
           </div>
         </div>
 
-        <h2 id="stage5">Stage 5 — Publish</h2>
+        <h2 id="stage5">Stage 5: Publish</h2>
         <p>When the pull request merges, the build and deploy workflow runs against the <code>main</code> branch. The compiled HTML site, PDF export, OpenAPI JSON, and search index are uploaded to the configured hosting target. The live site updates within minutes of the merge, with no manual intervention required.</p>
 
         <div class="page-nav">
@@ -687,7 +687,7 @@ All API requests must include a valid Bearer token in the `Authorization` header
         <table>
           <thead><tr><th>Branch</th><th>Purpose</th><th>Merge target</th></tr></thead>
           <tbody>
-            <tr><td><code>main</code></td><td>Always-publishable source of truth. Protected — no direct commits.</td><td>—</td></tr>
+            <tr><td><code>main</code></td><td>Always-publishable source of truth. Protected: no direct commits.</td><td>—</td></tr>
             <tr><td><code>docs/feature-name</code></td><td>New content or significant updates to existing content</td><td><code>main</code></td></tr>
             <tr><td><code>docs/fix-*</code></td><td>Typo fixes, broken link repairs, minor corrections</td><td><code>main</code></td></tr>
             <tr><td><code>release/vX.Y</code></td><td>Versioned documentation snapshot for a product release</td><td><code>main</code></td></tr>
@@ -709,10 +709,10 @@ chore(config): update mkdocs.yml nav structure for v1.1</code></pre>
         <h2 id="pr-process">Pull Request Process</h2>
         <ol>
           <li>Author opens a PR from their feature branch against <code>main</code></li>
-          <li>CI runs automatically — style lint, link check, build</li>
+          <li>CI runs automatically: style lint, link check, build</li>
           <li>At least one reviewer approves the content changes</li>
           <li>All CI checks pass and review comments are resolved</li>
-          <li>Author or reviewer merges — deployment runs automatically</li>
+          <li>Author or reviewer merges. Deployment runs automatically</li>
         </ol>
 
         <div class="page-nav">
@@ -799,23 +799,23 @@ chore(config): update mkdocs.yml nav structure for v1.1</code></pre>
 
         <h2 id="rule-types">Rule Categories</h2>
         <table>
-          <thead><tr><th>Level</th><th>Behaviour</th><th>Example rules</th></tr></thead>
+          <thead><tr><th>Level</th><th>Behavior</th><th>Example rules</th></tr></thead>
           <tbody>
-            <tr><td><span class="badge" style="background:var(--red-dim);color:var(--red);">error</span></td><td>Fails the CI build — must fix before merge</td><td>Wrong product name, banned term, broken heading hierarchy</td></tr>
-            <tr><td><span class="badge badge-amber">warning</span></td><td>Reported in CI — should fix, does not block</td><td>Passive voice, "simply" / "just", future tense for features</td></tr>
-            <tr><td><span class="badge badge-blue">suggestion</span></td><td>Advisory — fix when practical</td><td>Sentence length, heading capitalisation, Oxford comma</td></tr>
+            <tr><td><span class="badge" style="background:var(--red-dim);color:var(--red);">error</span></td><td>Fails the CI build: must fix before merge</td><td>Wrong product name, banned term, broken heading hierarchy</td></tr>
+            <tr><td><span class="badge badge-amber">warning</span></td><td>Reported in CI: should fix, does not block</td><td>Passive voice, "simply" / "just", future tense for features</td></tr>
+            <tr><td><span class="badge badge-blue">suggestion</span></td><td>Advisory: fix when practical</td><td>Sentence length, heading capitalization, Oxford comma</td></tr>
           </tbody>
         </table>
 
         <h2 id="examples">Common Violations &amp; Fixes</h2>
-        <div class="pre-header">passive voice — warning</div>
+        <div class="pre-header">Passive voice: warning</div>
         <pre><code><span class="hl-c"># ✗ Before</span>
 The request is authenticated by the server using a Bearer token.
 
 <span class="hl-c"># ✓ After</span>
 The server authenticates the request using a Bearer token.</code></pre>
 
-        <div class="pre-header">banned terminology — error</div>
+        <div class="pre-header">Banned terminology: error</div>
         <pre><code><span class="hl-c"># ✗ Before — "whitelist" is a banned term</span>
 Add your domain to the whitelist.
 
@@ -846,7 +846,7 @@ Add your domain to the allowlist.</code></pre>
         </table>
 
         <h2 id="configuration">Configuring Output Targets</h2>
-        <div class="pre-header">mkdocs.yml — output plugins</div>
+        <div class="pre-header">mkdocs.yml: output plugins</div>
         <pre><code><span class="hl-n">plugins</span>:
   - <span class="hl-s">search</span>
   - <span class="hl-n">with-pdf</span>:
@@ -873,7 +873,7 @@ Add your domain to the allowlist.</code></pre>
       <div id="page-mod-dashboard" class="page">
         <div class="page-eyebrow">Platform Modules</div>
         <h1>Dashboard</h1>
-        <p class="lead">The Dashboard is the command centre for your documentation project. It gives an at-a-glance view of build health, content coverage, contributor activity, and recent pipeline runs.</p>
+        <p class="lead">The Dashboard is the command center for your documentation project. It gives an at-a-glance view of build health, content coverage, contributor activity, and recent pipeline runs.</p>
         <h2 id="metrics">Key Metrics</h2>
         <table>
           <thead><tr><th>Metric</th><th>What it tells you</th></tr></thead>
@@ -897,11 +897,11 @@ Add your domain to the allowlist.</code></pre>
         <p class="lead">The Live Editor is a split-pane Markdown authoring environment with real-time HTML preview and inline Vale linting. Authors can write, preview, and fix style issues without leaving the browser.</p>
         <h2 id="editor-features">Features</h2>
         <ul>
-          <li><strong>Split-pane view</strong> — Markdown source on the left, rendered HTML preview on the right, updated on every keystroke</li>
-          <li><strong>Frontmatter validation</strong> — highlights missing or malformed frontmatter fields before saving</li>
-          <li><strong>Inline lint markers</strong> — Vale violations are underlined in the editor with hover explanations</li>
-          <li><strong>Keyboard shortcuts</strong> — standard editor shortcuts for bold, italic, code, links, and headings</li>
-          <li><strong>Export</strong> — download the current file as <code>.md</code> or copy the rendered HTML</li>
+          <li><strong>Split-pane view</strong>: Markdown source on the left, rendered HTML preview on the right, updated on every keystroke</li>
+          <li><strong>Frontmatter validation</strong>: highlights missing or malformed frontmatter fields before saving</li>
+          <li><strong>Inline lint markers</strong>: Vale violations are underlined in the editor with hover explanations</li>
+          <li><strong>Keyboard shortcuts</strong>: standard editor shortcuts for bold, italic, code, links, and headings</li>
+          <li><strong>Export</strong>: download the current file as <code>.md</code> or copy the rendered HTML</li>
         </ul>
         <div class="callout tip">
           <span class="callout-icon">✦</span>
@@ -922,11 +922,11 @@ Add your domain to the allowlist.</code></pre>
         <p class="lead">The Content Map is a visual representation of your entire documentation structure — every page, its position in the hierarchy, its status, and its relationships to other pages.</p>
         <h2 id="what-it-shows">What It Shows</h2>
         <ul>
-          <li><strong>Doc tree</strong> — full navigation hierarchy rendered as an interactive graph</li>
-          <li><strong>Orphaned pages</strong> — pages that exist in the <code>docs/</code> folder but are not referenced in the nav</li>
-          <li><strong>Broken cross-references</strong> — internal links that point to pages that do not exist</li>
-          <li><strong>Coverage gaps</strong> — sections of the nav that have placeholder stubs rather than full content</li>
-          <li><strong>Page metadata</strong> — last edited date, word count, lint status per page</li>
+          <li><strong>Doc tree</strong>: full navigation hierarchy rendered as an interactive graph</li>
+          <li><strong>Orphaned pages</strong>: pages that exist in the <code>docs/</code> folder but are not referenced in the nav</li>
+          <li><strong>Broken cross-references</strong>: internal links that point to pages that do not exist</li>
+          <li><strong>Coverage gaps</strong>: sections of the nav that have placeholder stubs rather than full content</li>
+          <li><strong>Page metadata</strong>: last edited date, word count, lint status per page</li>
         </ul>
         <div class="page-nav">
           <button class="page-nav-btn" onclick="navigate('mod-editor')"><span class="page-nav-label">← Previous</span><span class="page-nav-title">Live Editor</span></button>
@@ -940,10 +940,10 @@ Add your domain to the allowlist.</code></pre>
         <p class="lead">The Style Linter module provides an interactive view of all active Vale rules, current violations across the codebase, and the ability to run a lint pass against any file on demand.</p>
         <h2 id="linter-panel">Panel Layout</h2>
         <ul>
-          <li><strong>Rule browser</strong> — lists all active rules with their severity, description, and example violations</li>
-          <li><strong>Violations panel</strong> — all current lint issues grouped by file, filterable by severity</li>
-          <li><strong>Run on file</strong> — paste or select a file path and run Vale against it immediately</li>
-          <li><strong>Suppression manager</strong> — view and manage inline <code>vale off / vale on</code> suppressions across the codebase</li>
+          <li><strong>Rule browser</strong>: lists all active rules with their severity, description, and example violations</li>
+          <li><strong>Violations panel</strong>: all current lint issues grouped by file, filterable by severity</li>
+          <li><strong>Run on file</strong>: paste or select a file path and run Vale against it immediately</li>
+          <li><strong>Suppression manager</strong>: view and manage inline <code>vale off / vale on</code> suppressions across the codebase</li>
         </ul>
         <p>For the full Vale configuration reference, see the <span style="color:var(--accent);cursor:pointer;" onclick="navigate('linting')">Style Linting</span> core concepts page.</p>
         <div class="page-nav">
@@ -955,7 +955,7 @@ Add your domain to the allowlist.</code></pre>
       <div id="page-mod-outputs" class="page">
         <div class="page-eyebrow">Platform Modules</div>
         <h1>Build Outputs</h1>
-        <p class="lead">The Build Outputs module shows every artefact produced by the last successful pipeline run — with a preview, file size, and direct download or deploy link for each format.</p>
+        <p class="lead">The Build Outputs module shows every artifact produced by the last successful pipeline run — with a preview, file size, and direct download or deploy link for each format.</p>
         <h2 id="output-types">Available Outputs</h2>
         <table>
           <thead><tr><th>Output</th><th>Description</th><th>Typical size</th></tr></thead>
@@ -978,12 +978,12 @@ Add your domain to the allowlist.</code></pre>
         <p class="lead">The Configuration module provides a visual editor for the platform's <code>docs-center.config.yml</code> file — the single source of truth for site settings, navigation, theme, lint rules, and deploy targets.</p>
         <h2 id="config-sections">Configuration Sections</h2>
         <ul>
-          <li><strong>Site metadata</strong> — name, URL, description, author, copyright</li>
-          <li><strong>Navigation</strong> — page hierarchy, external links, nav sections</li>
-          <li><strong>Theme</strong> — colour palette, logo, font, feature flags</li>
-          <li><strong>Lint rules</strong> — active Vale style sets, severity overrides, suppression list</li>
-          <li><strong>Build plugins</strong> — PDF export, search, tags, social cards</li>
-          <li><strong>Deploy targets</strong> — GitHub Pages, Netlify site ID, S3 bucket</li>
+          <li><strong>Site metadata</strong>: name, URL, description, author, copyright</li>
+          <li><strong>Navigation</strong>: page hierarchy, external links, nav sections</li>
+          <li><strong>Theme</strong>: color palette, logo, font, feature flags</li>
+          <li><strong>Lint rules</strong>: active Vale style sets, severity overrides, suppression list</li>
+          <li><strong>Build plugins</strong>: PDF export, search, tags, social cards</li>
+          <li><strong>Deploy targets</strong>: GitHub Pages, Netlify site ID, S3 bucket</li>
         </ul>
         <p>For the full configuration schema reference, see the <span style="color:var(--accent);cursor:pointer;" onclick="navigate('ref-config')">Config Schema</span> reference page.</p>
         <div class="page-nav">
@@ -1002,7 +1002,7 @@ Add your domain to the allowlist.</code></pre>
           <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
           <tbody>
             <tr><td><code>site_name</code> <span class="badge" style="background:var(--red-dim);color:var(--red);">required</span></td><td>string</td><td>Display name of the documentation site</td></tr>
-            <tr><td><code>site_url</code></td><td>string</td><td>Canonical URL — used in sitemap and social meta tags</td></tr>
+            <tr><td><code>site_url</code></td><td>string</td><td>Canonical URL: used in sitemap and social meta tags</td></tr>
             <tr><td><code>site_description</code></td><td>string</td><td>Short description for SEO and portal header</td></tr>
             <tr><td><code>site_author</code></td><td>string</td><td>Author name for PDF cover and page meta</td></tr>
             <tr><td><code>docs_dir</code></td><td>string</td><td>Directory containing Markdown source files. Default: <code>docs/</code></td></tr>
@@ -1010,7 +1010,7 @@ Add your domain to the allowlist.</code></pre>
           </tbody>
         </table>
         <h2 id="theme-config">Theme</h2>
-        <div class="pre-header">docs-center.config.yml — theme section</div>
+        <div class="pre-header">docs-center.config.yml: theme section</div>
         <pre><code><span class="hl-n">theme</span>:
   <span class="hl-n">name</span>: <span class="hl-s">material</span>
   <span class="hl-n">palette</span>:
@@ -1037,7 +1037,7 @@ Add your domain to the allowlist.</code></pre>
         <h1>Changelog</h1>
         <p class="lead">All notable changes to the Docs-as-Code Platform are documented here. This project follows <a href="https://keepachangelog.com" target="_blank">Keep a Changelog</a> and <a href="https://semver.org" target="_blank">Semantic Versioning</a>.</p>
 
-        <h2 id="v1-0">v1.0.0 — 2026-02-28 <span class="badge badge-green" style="margin-left:8px;">Stable</span></h2>
+        <h2 id="v1-0">v1.0.0: 2026-02-28 <span class="badge badge-green" style="margin-left:8px;">Stable</span></h2>
         <h3>Added</h3>
         <ul>
           <li>Initial release of the Docs-as-Code Platform documentation portal</li>
@@ -1054,7 +1054,7 @@ Add your domain to the allowlist.</code></pre>
         <ul>
           <li>Dark amber theme consistent with VaultPay and CaseForge portfolio sites</li>
           <li>Fully interactive single-page navigation with dynamic table of contents</li>
-          <li>Responsive layout — sidebar and TOC hide on smaller screens</li>
+          <li>Responsive layout: sidebar and TOC hide on smaller screens</li>
           <li>Hosted on GitHub Pages via <code>SulagnaSasmal/docs-as-code-portal</code></li>
         </ul>
 
